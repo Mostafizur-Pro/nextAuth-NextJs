@@ -1,8 +1,12 @@
 import Head from "next/head";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import auth from "@/firebase/firebase.auth";
+import { useAuthState } from "react-firebase-hooks/auth";
 const HomePage = () => {
   const { data: session } = useSession();
+  const [user, loading, error] = useAuthState(auth);
+  console.log("user", user?.email);
   return (
     <div>
       <Head>
@@ -22,11 +26,16 @@ const HomePage = () => {
           </h3>
         </>
       ) : (
+        <></>
+      )}
+      {user?.email ? (
         <>
-          <h1 style={{ textAlign: "center" }}>
-            Login User Name: <Link href={"/login"}>Login</Link>
-          </h1>
+          <h3 style={{ textAlign: "center" }}>
+            Login User Email: {user?.email}
+          </h3>
         </>
+      ) : (
+        <></>
       )}
     </div>
   );
